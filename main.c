@@ -56,10 +56,56 @@ int main(void)
     // initialize the device
     SYSTEM_Initialize();
     int vin = 0;
+    int aux = 62;
+    int b1 = 0;
+    int b2 = 0;
+    int b3 = 0;
+    int b4 = 0;
+    int b5 = 0;
+   
     while (1)
     {
-       vin = ADC1_ConversionResultGet(channel_AN0);
-               
+       vin = ADC1_ConversionResultGet();
+       if ((vin > 0) && (vin<aux) && (b1==0)){
+           LATBbits.LATB15 = 1;
+           b1 = 1;
+       }
+       else if ((vin >= aux ) && (vin<(aux+aux) && (b2==0) )){
+           LATBbits.LATB14 = 1 ;
+           b2 = 1;
+       }
+       else if ((vin >= (aux+aux) && (vin<(aux*3) && (b3==0)))){
+           LATBbits.LATB13 = 1 ;
+           b3 = 1;
+       }
+       else if ((vin >= (aux*3) && (vin<(aux*4) && (b4==0)))){
+           LATBbits.LATB11 = 1 ;
+           b4 = 1;
+       }
+       else if ((vin >= (aux*4) && (vin<(aux*5)&& (b5==0)))){
+           LATBbits.LATB10 = 1 ;
+           b5 = 1;
+       }
+       else if ((b5 == 1) && (vin >= (aux*3)) && (vin <= aux*4)){
+           LATBbits.LATB10 = 0;
+           b5 = 0;
+       }
+       else if ((b4 == 1) && (vin >= (aux*2)) && (vin <= aux*3)){
+           LATBbits.LATB11 = 0;
+           b4 = 0;
+       }
+       else if ((b3 == 1) && (vin >= (aux)) && (vin <= aux*2)){
+           LATBbits.LATB13 = 0;
+           b3 = 0;
+       }
+       else if ((b2 == 1) && (vin > 0 ) && (vin <= (aux))){
+           LATBbits.LATB14 = 0 ;
+           b2 = 0;
+       }
+       else if ((b1 == 1) && (vin == 0) && (vin < aux)){
+           LATBbits.LATB15 = 0;
+           b1 = 0;    
+    }
     }
 
     return 1;
